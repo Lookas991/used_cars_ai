@@ -1,0 +1,66 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environments
+env/
+venv/
+.venv/
+.used-cars
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / editor configs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Jupyter / notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Data files
+notebooks/data/
+data/
+models/
+app/models/
+ollama_data/
+ollama_data/models/
+
+# SSH keys
+ollama_data/id_ed25519.pub
+ollama_data/id_ed25519
+
+
+# Database
+pg_data/
+
+# Env / secrets
+.env
+.env.*
+config/*.secret
+
+# Docker
+*.dockerignore
+docker-compose.override.yml
+
+# Coverage / testing
+.coverage
+htmlcov/
+.tox/
+pytest_cache/
+
+# Misc
+*.sqlite3
+*.db
+*.egg-info/
+dist/
+build/
