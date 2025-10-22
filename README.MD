@@ -50,6 +50,8 @@ POST /predict/
 Send car features JSON to get predicted price in EUR.
 
 Example JSON:
+
+```
 {
 "manufacturer_name": "BMW",
 "model_name": "X5",
@@ -82,3 +84,4 @@ Example JSON:
 "feature_8": 1,
 "feature_9": 0
 }
+```
