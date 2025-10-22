@@ -4,6 +4,7 @@ This project is a **FastAPI backend** for predicting used car prices using machi
 
 ## Project Structure
 
+```
 /used-cars
 ├── app/ # FastAPI code
 │ ├── routers/ # API endpoints
@@ -15,6 +16,7 @@ This project is a **FastAPI backend** for predicting used car prices using machi
 │ └── data/ # CSV datasets (ignored in git)
 ├── ollama_data/ # LLM model data (ignored in git)
 └── pg_data/ # Local Postgres data (ignored in git)
+```
 
 ## Setup
 
