@@ -1,8 +1,9 @@
 fastapi
-uvicorn
+uvicorn[standard]
 requests
-scikit-learn
-joblib
-numpy
-pandas
+httpx
+sqlalchemy
 psycopg2-binary
+kaggle
+pandas
+python-dotenv

@@ -1,44 +1,47 @@
-# app/routers/predict.py
-from app.services.exchange_service import get_usd_to_eur_rate
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Depends, Request
+from typing import Any, Dict
 from pydantic import BaseModel
-from typing import Any, Dict, Optional
-from app.services.predict_service import predict_from_dict, health as model_health
-
+from services.predict_service import predict_from_dict, health as model_health
+from database import get_db
+import json
+from sqlalchemy.orm import Session
+from db.models.models import PredictionLog
 
 router = APIRouter(prefix="/predict", tags=["Prediction"])
 
 
-class PredictionRequest(BaseModel):
-    year_produced: int
-    odometer_value: float
-    engine_capacity: float
-    engine_fuel: str
-    transmission: str
-    body_type: str
-    drivetrain: str
-    color: str
-    manufacturer_name: str
-    car_model: str
+class PredictRequest(BaseModel):
+    # Schema is permissive: any keys will be forwarded to Ollama, but include common fields
+    manufacturer_name: str | None = None
+    car_model: str | None = None
+    year_produced: int | None = None
+    odometer_value: float | None = None
+    engine_capacity: float | None = None
+    transmission: str | None = None
+    engine_fuel: str | None = None
+    color: str | None = None
+    drivetrain: str | None = None
 
 
 @router.get("/health")
-async def healthcheck() -> Dict[str, str]:
+def health():
     return model_health()
 
 
 @router.post("/")
-async def predict_price(req: PredictionRequest):
+def predict(req: PredictRequest, request: Request, db: Session = Depends(get_db)) -> Dict[str, Any]:
+    payload = req.dict()
     try:
-        pred_usd = predict_from_dict(req.dict())
-        rate = get_usd_to_eur_rate()
-        price_eur = round(pred_usd * rate, 2)
-        return {
-            "predicted_price_usd": float(pred_usd),
-            "predicted_price_eur": float(price_eur),
-        }
-    except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+        result = predict_from_dict(payload)
+        # log prediction
+        try:
+            pl = PredictionLog(payload=json.dumps(payload),
+                               response=json.dumps(result))
+            db.add(pl)
+            db.commit()
+        except Exception:
+            # logging failure should not break response
+            pass
+        return result
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"Prediction failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

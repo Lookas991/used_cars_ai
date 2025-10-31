@@ -47,6 +47,9 @@ pg_data/
 .env
 .env.*
 config/*.secret
+# Secrets
+.kaggle/
+kaggle.json
 
 # Docker
 *.dockerignore

@@ -1,7 +1,14 @@
-CREATE TABLE IF NOT EXISTS predictions (
+CREATE TABLE IF NOT EXISTS dataset_logs (
     id SERIAL PRIMARY KEY,
-    year INT,
-    mileage INT,
-    predicted_price NUMERIC,
+    ref VARCHAR(512) UNIQUE NOT NULL,
+    title VARCHAR(512),
+    path TEXT,
+    downloaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS prediction_logs (
+    id SERIAL PRIMARY KEY,
+    payload JSONB,
+    response JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
